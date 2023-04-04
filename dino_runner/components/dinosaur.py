@@ -1,5 +1,5 @@
 import pygame
-from dino_runner.utils.constants import RUNNING,JUMPING,DUCKING
+from dino_runner.utils.constants import RUNNING,JUMPING,DUCKING,DINO_DEAD
 
 class Dinosaur:
     X_POS = 80
@@ -74,6 +74,8 @@ class Dinosaur:
             self.dino_rect.y = self.Y_POS
             self.dino_jump = False
             self.jump_vel = self.JUMP_VEL
+
+
 
 
 

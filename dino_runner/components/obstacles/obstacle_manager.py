@@ -1,21 +1,33 @@
 from dino_runner.components.obstacles.cactus import Cactus
+from dino_runner.components.obstacles.bird_evil import Bird
+import random
 
 
 class ObstacleManager:
+
+
     def __init__(self):
         self.obstacles = []
 
 
     def update(self, game_speed,player):
+        select_mob = random.randint(0,1)
         if len(self.obstacles) == 0:
-            self.obstacles.append(Cactus())
+            self.obstacles.append(Cactus())if select_mob == 0 else self.obstacles.append(Bird())
         for obstacle in self.obstacles:
             if obstacle.rect.x < -obstacle.rect.width:
-                self.obstacles.pop()
+                #self.obstacles.pop(0)
+                self.obstacles = []
             obstacle.update(game_speed,player)
 
     def draw(self, screen):
         for obstacle in self.obstacles:
             obstacle.draw(screen)
+
+#self.obstacles.append(random.choice(self.types))
+        # for obstacle in self.obstacles:
+        #     if obstacle.rect.x < -obstacle.rect.width:
+        #         self.obstacles.pop()
+        #     obstacle.update(game_speed,player)
 
 
