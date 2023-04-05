@@ -1,6 +1,6 @@
 import pygame
-from dino_runner.utils.constants import (RUNNING,RUNNING_SHIELD,JUMPING,JUMPING_SHIELD,DUCKING,DUCKING_SHIELD,
-                                         DEFAULT_TYPE,SHIELD_TYPE)
+from dino_runner.utils.constants import (RUNNING,RUNNING_SHIELD,RUNNING_HAMMER,JUMPING,JUMPING_SHIELD,JUMPING_HAMMER,
+                                         DUCKING,DUCKING_SHIELD,DUCKING_HAMMER, DEFAULT_TYPE,SHIELD_TYPE,HAMMER_TYPE)
 
 class Dinosaur:
     X_POS = 80
@@ -9,9 +9,9 @@ class Dinosaur:
     JUMP_VEL = 8.5
     
     def __init__(self):
-        self.run_image = {DEFAULT_TYPE: RUNNING,SHIELD_TYPE:RUNNING_SHIELD}
-        self.duck_image = {DEFAULT_TYPE: DUCKING,SHIELD_TYPE:DUCKING_SHIELD}
-        self.jump_image = {DEFAULT_TYPE: JUMPING,SHIELD_TYPE:JUMPING_SHIELD}
+        self.run_image = {DEFAULT_TYPE: RUNNING,SHIELD_TYPE:RUNNING_SHIELD,HAMMER_TYPE:RUNNING_HAMMER}
+        self.duck_image = {DEFAULT_TYPE: DUCKING,SHIELD_TYPE:DUCKING_SHIELD,HAMMER_TYPE:DUCKING_HAMMER}
+        self.jump_image = {DEFAULT_TYPE: JUMPING,SHIELD_TYPE:JUMPING_SHIELD,HAMMER_TYPE:JUMPING_HAMMER}
         self.type = DEFAULT_TYPE
         self.image = self.run_image[self.type][0]
         self.dino_rect = self.image.get_rect()
@@ -83,6 +83,8 @@ class Dinosaur:
     def set_power_up(self,power_up):
         if power_up.type == SHIELD_TYPE:
             self.type = SHIELD_TYPE
+        if power_up.type == HAMMER_TYPE:
+            self.type = HAMMER_TYPE
 
 
 
