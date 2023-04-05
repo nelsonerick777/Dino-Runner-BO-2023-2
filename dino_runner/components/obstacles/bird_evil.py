@@ -4,12 +4,13 @@ from dino_runner.utils.constants import BIRD
 
 class Bird(Obstacle):
         
+        bird_posicion = [260, 150, 205]
 
         def __init__(self):
                 
             image = BIRD[0]
             super().__init__(image)
-            self.rect.y = 260
+            self.rect.y = self.bird_posicion[random.randint(0,2)]
             self.step_index = 0
             self.flying = True
 
