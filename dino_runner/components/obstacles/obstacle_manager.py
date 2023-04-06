@@ -15,9 +15,9 @@ class ObstacleManager:
         if len(self.obstacles) == 0:
             self.obstacles.append(Cactus())if select_mob == 0 else self.obstacles.append(Bird())
         for obstacle in self.obstacles:
-            if obstacle.rect.x < -obstacle.rect.width:
-                #self.obstacles.pop(0)
-                self.obstacles = []
+            if player.rect2.colliderect(obstacle.rect) or obstacle.rect.x < -obstacle.rect.width:
+                self.obstacles.pop(0)
+                #if player.image2.rect.colliderect(self.rect):
             obstacle.update(game_speed,player)
 
     def draw(self, screen):

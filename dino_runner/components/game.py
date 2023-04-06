@@ -1,6 +1,6 @@
 import pygame
 
-from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS
+from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, GAME_OVER,DINO_START
 from dino_runner.components import text_itils
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.atmosphere.clouds import Clouds
@@ -24,6 +24,7 @@ class Game:
         self.obstacle_manager = ObstacleManager()
         self.power_up_manager = PowerUpManager()
         self.points = 0
+        self.max_points = 0
         self.death_count = 0
 
     def run(self):
@@ -49,7 +50,7 @@ class Game:
     def update(self):
         if self.playing:
             user_input = pygame.key.get_pressed()
-            self.player.update(user_input)
+            self.player.update(user_input,self.game_speed)
             self.clouds.update()
             self.obstacle_manager.update(self.game_speed,self.player)
             self.power_up_manager.update(self.game_speed,self.points,self.player)
@@ -96,13 +97,22 @@ class Game:
 
     def print_menu_element(self):
         if self.death_count == 0:
+            picture = pygame.transform.scale(DINO_START,[197,201])
+            self.screen.blit(picture, [460,80])
             text,text_rect = text_itils.get_message("Press any key to Start", 30)
             self.screen.blit(text,text_rect)
+        elif self.points > self.max_points:
+             self.max_points = self.points
         else:
-            text,text_rect = text_itils.get_message("Press any key to   Restart", 30)
+            picture = pygame.transform.scale(GAME_OVER,[500,150])
+            self.screen.blit(picture, [310,140])
+            text,text_rect = text_itils.get_message("Press any key to  Restart", 30)
             score,score_rect = text_itils.get_message("Your Score: " + str(self.points),30, height=SCREEN_HEIGHT//2+50)
             self.screen.blit(text,text_rect)
             self.screen.blit(score,score_rect)
+            if self.death_count >=2:
+                max_score,max_score_rect = text_itils.get_message("Max Score: " + str(self.max_points),30, height=SCREEN_HEIGHT//2+100)
+                self.screen.blit(max_score,max_score_rect)
 
     def reset(self):
         self.game_speed = 20

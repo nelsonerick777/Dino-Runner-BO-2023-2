@@ -1,12 +1,15 @@
 import pygame
 from dino_runner.utils.constants import (RUNNING,RUNNING_SHIELD,RUNNING_HAMMER,JUMPING,JUMPING_SHIELD,JUMPING_HAMMER,
-                                         DUCKING,DUCKING_SHIELD,DUCKING_HAMMER, DEFAULT_TYPE,SHIELD_TYPE,HAMMER_TYPE)
+                                         DUCKING,DUCKING_SHIELD,DUCKING_HAMMER, DEFAULT_TYPE,SHIELD_TYPE,HAMMER_TYPE,
+                                         HAMMER,SCREEN_WIDTH)
 
 class Dinosaur:
     X_POS = 80
     Y_POS = 310
     Y_POS_DUCK = 340
     JUMP_VEL = 8.5
+    X_POS_HAMMER = 80
+    Y_POS_HAMMER = 310
     
     def __init__(self):
         self.run_image = {DEFAULT_TYPE: RUNNING,SHIELD_TYPE:RUNNING_SHIELD,HAMMER_TYPE:RUNNING_HAMMER}
@@ -26,8 +29,14 @@ class Dinosaur:
         self.shield = False
         self.hammer = False
         self.time_up_power_up = 0
+        self.hammer_count = 0
+        self.image2 = HAMMER
+        self.rect2 = self.image2.get_rect()
+        self.rect2.x = 0
+        self.rect2.y = 0
+        self.activate = False
 
-    def update(self, user_input):
+    def update(self, user_input,game_speed):
         if self.dino_jump:
             self.jump()
         if self.dino_duck:
@@ -49,17 +58,32 @@ class Dinosaur:
             self.dino_run = True
             self.dino_duck = False
             self.dino_jump = False
+        
+        if self.hammer == True:
+            if user_input[pygame.K_SPACE]:
+               self.activate = True
+               self.rect2.x = self.dino_rect.x
+               self.rect2.y = self.dino_rect.y
+            if self.activate:
+                self.ability(game_speed)
+                time_to_show = round((self.time_up_power_up - pygame.time.get_ticks()) / 1000, 2)
+                if time_to_show <0:
+                    self.reset()
+
 
         if self.step_index >= 10:
             self.step_index = 0
 
-        if self.shield or self.hammer:
+        if self.shield:
             time_to_show = round((self.time_up_power_up - pygame.time.get_ticks()) / 1000, 2)
             if time_to_show <0:
                 self.reset()
 
+
     def draw(self, screen):
         screen.blit(self.image, self.dino_rect)
+        if self.activate:
+           screen.blit(self.image2,self.rect2)
 
 
     def run(self):
@@ -97,12 +121,24 @@ class Dinosaur:
             self.type = HAMMER_TYPE
             self.hammer = True
             self.time_up_power_up = power_up.time_up
+    
+    def ability(self,game_speed):
+        self.rect2.x += game_speed
+        #if self.rect2.x > self.rect2.weight:
+
+
+
+
 
     def reset(self):
         self.type = DEFAULT_TYPE
         self.shield = False
         self.hammer = False
         self.time_up_power_up = 0
+        self.hammer_count = 0
+        self.activate = False
+        self.rect2.x = 0
+        self.rect2.y = 0
 
 
 
